@@ -1,0 +1,8 @@
+.idea/
+.idea/*
+.idea/workspace.xml
+.DS_Store
+*.log*
+*.exe
+*.tar.gz
+cache
