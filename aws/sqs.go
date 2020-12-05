@@ -41,7 +41,7 @@ func SendToSQS(queueUrl, message string) (*sqs.SendMessageOutput, error) {
 }
 
 type Handler interface {
-	HandleMessage(messages []*sqs.Message) error
+	HandleMessage(queueUrl string, messages []*sqs.Message) error
 }
 
 type Consumer struct {
@@ -54,8 +54,8 @@ func NewConsumer(queueUrl string) *Consumer {
 	}
 }
 
-func (c *Consumer) AddHandler(input *sqs.ReceiveMessageInput, handler Handler) {
-	go c.handlerLoop(input, handler)
+func (c *Consumer) AddHandler(queueUrl string,input *sqs.ReceiveMessageInput, handler Handler) {
+	go c.handlerLoop(queueUrl, input, handler)
 }
 
 func (c *Consumer) NewInputParams() *sqs.ReceiveMessageInput {
@@ -66,10 +66,10 @@ func (c *Consumer) NewInputParams() *sqs.ReceiveMessageInput {
 	}
 }
 
-func (c *Consumer) handlerLoop(input *sqs.ReceiveMessageInput, handler Handler) error {
+func (c *Consumer) handlerLoop(queueUrl string,input *sqs.ReceiveMessageInput, handler Handler) error {
 	for {
 		output, _ := SqsCli.ReceiveMessage(input)
-		err := handler.HandleMessage(output.Messages)
+		err := handler.HandleMessage(queueUrl,output.Messages)
 		if err != nil {
 			return errors.Errorf("New sqs client error:%v", err.Error())
 		}
