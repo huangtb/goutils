@@ -2,41 +2,33 @@ package aws
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/glacier"
 	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/pkg/errors"
 	"net/http"
 	"os"
 	"path"
 )
 
-var s3Cli *s3Client
+var S3Cli *s3.S3
 
-type s3Client struct {
-	client *s3.S3
-}
-
-func GetS3Client() *s3Client {
-	return s3Cli
-}
-
-func (a *Aws) NewS3Client() (sc s3Client, err error) {
+func (a *Aws) InitS3Client() error {
 	creds := credentials.NewStaticCredentials(a.AccessKey, a.SecretKey, "")
-	_, err = creds.Get()
+	_, err := creds.Get()
 	if err != nil {
-		return sc, errors.New("New Static Credentials  error:" + err.Error())
+		return errors.Errorf("New Static Credentials  error:" + err.Error())
 	}
 	cfg := aws.NewConfig().WithRegion(a.Region).WithCredentials(creds)
-	sc.client = s3.New(session.New(), cfg)
-	s3Cli = &sc
-	return sc,nil
+	s3 := s3.New(session.New(), cfg)
+	S3Cli = s3
+	return nil
 }
 
-func (s *s3Client) Upload(bucket, prefix, filePath string) error {
+func PutToS3(bucket, prefix, filePath string) error {
 	file, err := os.Open(filePath)
 	if err != nil {
 		return err
@@ -55,7 +47,7 @@ func (s *s3Client) Upload(bucket, prefix, filePath string) error {
 	buffer := make([]byte, size)
 	file.Read(buffer)
 	s3key := fmt.Sprintf("%s/%s", prefix, path.Base(filePath))
-	_, err = s.client.PutObject(&s3.PutObjectInput{
+	_, err = S3Cli.PutObject(&s3.PutObjectInput{
 		Bucket:               aws.String(bucket),
 		Key:                  aws.String(s3key),
 		ACL:                  aws.String(glacier.CannedACLPublicRead),

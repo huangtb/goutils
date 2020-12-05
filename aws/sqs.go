@@ -8,7 +8,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-var sqsCli *sqs.SQS
+var SqsCli *sqs.SQS
 
 func (a *Aws) InitSqsClient() error {
 	cred := credentials.NewStaticCredentials(a.AccessKey, a.SecretKey, "")
@@ -24,7 +24,7 @@ func (a *Aws) InitSqsClient() error {
 	if sc.Client == nil {
 		return errors.Errorf("New sqs client error")
 	}
-	sqsCli = sc
+	SqsCli = sc
 	return nil
 }
 
@@ -33,7 +33,7 @@ func SendToSQS(queueUrl, message string) (*sqs.SendMessageOutput, error) {
 		MessageBody: aws.String(message),  // Required
 		QueueUrl:    aws.String(queueUrl), // Required
 	}
-	output, err := sqsCli.SendMessage(sendParams)
+	output, err := SqsCli.SendMessage(sendParams)
 	if err != nil {
 		return nil, errors.Errorf("New sqs client error:%v", err.Error())
 	}
@@ -61,14 +61,14 @@ func (c *Consumer) AddHandler(input *sqs.ReceiveMessageInput, handler Handler) {
 func (c *Consumer) NewInputParams() *sqs.ReceiveMessageInput {
 	return &sqs.ReceiveMessageInput{
 		QueueUrl:            aws.String(c.QueueUrl),
-		MaxNumberOfMessages: aws.Int64(3),   //单次最大接收消息数
-		WaitTimeSeconds:     aws.Int64(10),  //长轮询
+		MaxNumberOfMessages: aws.Int64(3),  //单次最大接收消息数
+		WaitTimeSeconds:     aws.Int64(10), //长轮询
 	}
 }
 
 func (c *Consumer) handlerLoop(input *sqs.ReceiveMessageInput, handler Handler) error {
 	for {
-		output, _ := sqsCli.ReceiveMessage(input)
+		output, _ := SqsCli.ReceiveMessage(input)
 		err := handler.HandleMessage(output.Messages)
 		if err != nil {
 			return errors.Errorf("New sqs client error:%v", err.Error())

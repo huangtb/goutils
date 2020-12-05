@@ -10,21 +10,18 @@ import (
 	"time"
 )
 
-var fHose *Firehose
+var FHoseCli *firehose.Firehose
 
-type Firehose struct {
-	client *firehose.Firehose
-}
-
-func (a *Aws) NewFireHose() (*Firehose, error) {
+func (a *Aws) InitFireHoseClient() error {
 	sess := session.Must(session.NewSession(aws.NewConfig().WithRegion(a.Region).
 		WithCredentials(credentials.NewStaticCredentials(a.AccessKey,
 			a.SecretKey, ""))))
-	fHose.client = firehose.New(sess)
-	return fHose, nil
+	f := firehose.New(sess)
+	FHoseCli = f
+	return nil
 }
 
-func (f *Firehose) PutData(data, topic, StreamName string) error {
+func PutToFireHose(data, topic, StreamName string) error {
 	b, err := json.Marshal(data)
 	if err != nil {
 		return err
@@ -36,6 +33,6 @@ func (f *Firehose) PutData(data, topic, StreamName string) error {
 			Data: []byte(str),
 		},
 	}
-	_, err = f.client.PutRecord(params)
+	_, err = FHoseCli.PutRecord(params)
 	return err
 }

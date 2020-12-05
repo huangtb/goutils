@@ -1,4 +1,4 @@
-module github.com/huangtb/go-utils
+module github.com/huangtb/goutils
 
 go 1.13
 
