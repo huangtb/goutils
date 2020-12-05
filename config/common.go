@@ -10,6 +10,7 @@ import (
 var Common *CommonConfig
 
 type CommonConfig struct {
+	Country      string       `json:"country" yaml:"country"`
 	EbkDataMysql mysql.Mysql  `json:"ebk_data_mysql" yaml:"ebk_data_mysql"`
 	EbkCoreMysql mysql.Mysql  `json:"ebk_core_mysql" yaml:"ebk_core_mysql"`
 	Stat         StatConfig   `json:"stat" yaml:"stat"`
