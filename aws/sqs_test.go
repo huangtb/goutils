@@ -47,7 +47,7 @@ func TestConsumer(t *testing.T) {
 type ApplyMessage struct {
 }
 
-func (m *ApplyMessage) HandleMessage(messages []*sqs.Message) error {
+func (m *ApplyMessage) HandleMessage(url string, messages []*sqs.Message) error {
 	log.Printf("Receive message:%s", messages)
 	return nil
 
