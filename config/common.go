@@ -1,21 +1,21 @@
 package config
 
 import (
-	"github.com/huangtb/go-utils/aws"
-	"github.com/huangtb/go-utils/mq"
-	"github.com/huangtb/go-utils/mysql"
+	"github.com/huangtb/goutils/aws"
+	"github.com/huangtb/goutils/mq"
+	"github.com/huangtb/goutils/mysql"
 	"gopkg.in/yaml.v2"
 )
 
-var CommConfig *CommonConfig
+var Common *CommonConfig
 
 type CommonConfig struct {
 	EbkDataMysql mysql.Mysql  `json:"ebk_data_mysql" yaml:"ebk_data_mysql"`
 	EbkCoreMysql mysql.Mysql  `json:"ebk_core_mysql" yaml:"ebk_core_mysql"`
-	StatConfig   StatConfig   `json:"stat_config" yaml:"stat_config"`
+	Stat         StatConfig   `json:"stat" yaml:"stat"`
 	Redis        Redis        `json:"redis" yaml:"redis"`
-	AwsConfig    aws.Aws      `json:"aws_config" yaml:"aws_config"`
-	NsqConfig    mq.NsqConfig `json:"nsq_config" yaml:"nsq_config"`
+	Aws          aws.Aws      `json:"aws" yaml:"aws"`
+	Nsq          mq.NsqConfig `json:"nsq" yaml:"nsq"`
 }
 
 type Redis struct {
@@ -31,5 +31,5 @@ type StatConfig struct {
 }
 
 func UnmarshalCommConfig(content string) error {
-	return yaml.Unmarshal([]byte(content), &CommConfig)
+	return yaml.Unmarshal([]byte(content), &Common)
 }

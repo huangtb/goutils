@@ -11,10 +11,10 @@ import (
 var DdbCli *dynamo.DB
 
 type Aws struct {
-	Region    string
-	Endpoint  string
-	AccessKey string
-	SecretKey string
+	Region    string `json:"region" yaml:"region"`
+	Endpoint  string `json:"endpoint" yaml:"endpoint"`
+	AccessKey string `json:"access_key" yaml:"access_key"`
+	SecretKey string `json:"secret_key" yaml:"secret_key"`
 }
 
 func (a *Aws) InitDynamoDBClient() error {

@@ -3,7 +3,7 @@ package web
 import (
 	"bytes"
 	"github.com/gin-gonic/gin"
-	"github.com/huangtb/go-utils/exception"
+	"github.com/huangtb/goutils/exception"
 	"gopkg.in/afmobi-QSee/statlog.v2"
 	"log"
 	"net/http"

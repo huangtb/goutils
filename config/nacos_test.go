@@ -19,7 +19,7 @@ func unmarshalExpConfig(content string) error {
 
 
 func TestNacos(t *testing.T) {
-	localFilePath := "E:\\code\\goproject\\ken-dmp\\go-utils\\config\\config-test.yml"
+	localFilePath := "E:\\code\\goproject\\ken-dmp\\goutils\\config\\config-test.yml"
 	nacos := &Nacos{}
 	nacos.LoadNConfig(localFilePath)
 	fmt.Printf("nacos.NConfig.ServerIpAddr[0]>>%v \n", nacos.NConfig.ServerIpAddr[0])
