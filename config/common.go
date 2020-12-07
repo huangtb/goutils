@@ -2,8 +2,8 @@ package config
 
 import (
 	"github.com/huangtb/goutils/aws"
+	"github.com/huangtb/goutils/db"
 	"github.com/huangtb/goutils/mq"
-	"github.com/huangtb/goutils/mysql"
 	"gopkg.in/yaml.v2"
 )
 

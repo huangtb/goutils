@@ -30,7 +30,7 @@ func TestNacos(t *testing.T) {
 	if err := UnmarshalCommConfig(content); err != nil {
 		panic(err)
 	}
-	fmt.Printf("公共配置 CommConfig :%+v \n", CommConfig.EbkDataMysql.User)
+	fmt.Printf("公共配置 CommConfig :%+v \n", Common.EbkDataMysql.User)
 	//cp := nacos.NewDefaultListenConfigParam()
 	//commCP := nacos.NewListenConfigParam(nacos.NConfig.CommDataId,nacos.NConfig.Group,UnmarshalCommConfig)
 	//nacos.ListenCenterConfig(commCP)

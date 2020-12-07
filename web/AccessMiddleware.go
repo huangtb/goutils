@@ -2,7 +2,6 @@ package web
 
 import (
 	"bytes"
-	//"encryption-service/basic/log"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
 )
