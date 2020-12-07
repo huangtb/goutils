@@ -1,4 +1,4 @@
-package main
+package db
 
 import (
 	"github.com/go-redis/redis"
@@ -12,7 +12,7 @@ func NewRedisOptions(redisAddr string, redisDB int) *redis.Options {
 	return &redis.Options{
 		Addr:        redisAddr,
 		Password:    "",
-		DB:          redisDB,	
+		DB:          redisDB,
 		DialTimeout: 3 * time.Second,
 		ReadTimeout: 3 * time.Second,
 		PoolSize:    5,

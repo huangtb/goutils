@@ -1,4 +1,4 @@
-package mysql
+package db
 
 import (
 	"fmt"
@@ -24,7 +24,7 @@ func (m *Mysql) NewDao() (d Dao, err error) {
 				m.User,m.Pwd,m.Host, m.Port, m.DefaultDB)
 	fmt.Printf("d1:%+v,d1地址:%p\n", d, &d)
 
-	if d.Client, err = gorm.Open("mysql", url); err != nil {
+	if d.Client, err = gorm.Open("db", url); err != nil {
 		return d, err
 	}
 	d.Client.SingularTable(true)       //表名采用单数形式
