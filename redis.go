@@ -2,28 +2,21 @@ package main
 
 import (
 	"github.com/go-redis/redis"
+	"github.com/pkg/errors"
 	"time"
 )
 
-var redisCli *redisClient
-
-type redisClient struct {
-	client *redis.Client
-}
-
-func GetRedisClient() *redisClient {
-	return redisCli
-}
+var RedisCli *redis.Client
 
 func NewRedisOptions(redisAddr string, redisDB int) *redis.Options {
 	return &redis.Options{
 		Addr:        redisAddr,
 		Password:    "",
-		DB:          redisDB,
-		DialTimeout: 10 * time.Second,
+		DB:          redisDB,	
+		DialTimeout: 3 * time.Second,
 		ReadTimeout: 3 * time.Second,
 		PoolSize:    5,
-		PoolTimeout: 10 * time.Second,
+		PoolTimeout: 3 * time.Second,
 	}
 }
 
@@ -31,9 +24,8 @@ func InitRedisClient(options *redis.Options) (string, error) {
 	client := redis.NewClient(options)
 	pong, err := client.Ping().Result()
 	if err != nil {
-		return "", err
+		return "", errors.Errorf("Init redis client error:%s", err.Error())
 	}
-	redisCli.client = client
+	RedisCli = client
 	return pong, nil
 }
-
