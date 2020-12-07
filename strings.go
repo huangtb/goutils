@@ -68,11 +68,3 @@ func UUID() string {
 }
 
 
-
-func main()  {
-	log.Printf("UUID>%s",Md5UUID())
-	log.Printf("UUID2>%s",UUID())
-
-	log.Printf("uuid>%s",uuid())
-
-}

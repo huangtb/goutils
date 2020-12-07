@@ -2,7 +2,7 @@ package exception
 
 const (
 	DdbCCF = "ConditionalCheckFailedException"        //有条件请求失败
-	DdbRNF = "ResourceNotFoundException"                          //ResourceNotFoundException 未找到请求的资源
+	DdbRNF = "ResourceNotFoundException"              //ResourceNotFoundException 未找到请求的资源
 	DdbT   = "ThrottlingException"                    //请求速率超出吞吐量上限
 	DdbPTE = "ProvisionedThroughputExceededException" //已超过表或一个或更多全局二级索引的最大允许预置吞吐量
 	DdbRLE = "RequestLimitExceeded"                   //吞吐量超出您的账户的当前吞吐量限制
