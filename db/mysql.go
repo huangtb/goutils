@@ -24,15 +24,14 @@ func (m *Mysql) NewDao() (d Dao, err error) {
 				m.User,m.Pwd,m.Host, m.Port, m.DefaultDB)
 	fmt.Printf("d1:%+v,d1地址:%p\n", d, &d)
 
-	if d.Client, err = gorm.Open("db", url); err != nil {
+	if d.Client, err = gorm.Open("mysql", url); err != nil {
 		return d, err
 	}
 	d.Client.SingularTable(true)       //表名采用单数形式
 	d.Client.DB().SetMaxOpenConns(100) 	//SetMaxOpenConns用于设置最大打开的连接数
 	d.Client.DB().SetMaxIdleConns(10)  	//SetMaxIdleConns用于设置闲置的连接数
 	d.Client.DB().SetConnMaxLifetime(30 * time.Minute)
-
-	d.Client.LogMode(true) 	//启用Logger，显示详细日志
+	d.Client.LogMode(true) //true表示启用Logger，显示详细日志
 
 	if err = d.Client.Set("gorm:table_options", "ENGINE=InnoDB").Error; err != nil {
 		_ = d.Client.Close()
