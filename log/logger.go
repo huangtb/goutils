@@ -31,8 +31,8 @@ func (l *Logger) Info(format string, args ...interface{}) {
 }
 
 func (l *Logger) Error(format string, args ...interface{}) {
-	l.localLogger.Errorf(format, args...)
-	l.esLogger.Errorf(format, args...)
+	l.localLogger.WithFields(log.Fields{"trace_id": ""}).Errorf(format, args...)
+	l.esLogger.WithFields(log.Fields{"trace_id": ""}).Errorf(format, args...)
 }
 
 func (l *Logger) InfoWithID(traceID string, args ...interface{}) {

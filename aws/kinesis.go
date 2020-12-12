@@ -4,18 +4,25 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/firehose"
+	"github.com/pkg/errors"
 	"time"
 )
 
 var FHoseCli *firehose.Firehose
 
 func (a *Aws) InitFireHoseClient() error {
+
+	cred := getCredentials(a.AccessKey,a.SecretKey)
+	_, err := cred.Get()
+	if err != nil {
+		return errors.Errorf("New Static Credentials  error:" , err.Error())
+	}
+
 	sess := session.Must(session.NewSession(aws.NewConfig().WithRegion(a.Region).
-		WithCredentials(credentials.NewStaticCredentials(a.AccessKey,
-			a.SecretKey, ""))))
+		WithCredentials(cred)))
+
 	f := firehose.New(sess)
 	FHoseCli = f
 	return nil

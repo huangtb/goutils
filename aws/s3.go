@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/glacier"
 	"github.com/aws/aws-sdk-go/service/s3"
@@ -17,12 +16,14 @@ import (
 var S3Cli *s3.S3
 
 func (a *Aws) InitS3Client() error {
-	creds := credentials.NewStaticCredentials(a.AccessKey, a.SecretKey, "")
-	_, err := creds.Get()
+
+	cred := getCredentials(a.AccessKey,a.SecretKey)
+	_, err := cred.Get()
 	if err != nil {
-		return errors.Errorf("New Static Credentials  error:" + err.Error())
+		return errors.Errorf("New Static Credentials  error:" , err.Error())
 	}
-	cfg := aws.NewConfig().WithRegion(a.Region).WithCredentials(creds)
+
+	cfg := aws.NewConfig().WithRegion(a.Region).WithCredentials(cred)
 	s3 := s3.New(session.New(), cfg)
 	S3Cli = s3
 	return nil

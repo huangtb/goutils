@@ -2,7 +2,6 @@ package aws
 
 import (
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/sqs"
 	"github.com/pkg/errors"
@@ -11,7 +10,13 @@ import (
 var SqsCli *sqs.SQS
 
 func (a *Aws) InitSqsClient() error {
-	cred := credentials.NewStaticCredentials(a.AccessKey, a.SecretKey, "")
+
+	cred := getCredentials(a.AccessKey,a.SecretKey)
+	_, err := cred.Get()
+	if err != nil {
+		return errors.Errorf("New Static Credentials  error:" , err.Error())
+	}
+
 	ses, err := session.NewSession(&aws.Config{
 		Region:      aws.String(a.Region),
 		Credentials: cred,
@@ -20,6 +25,7 @@ func (a *Aws) InitSqsClient() error {
 	if err != nil {
 		return errors.Errorf("New aws session error:%v", err.Error())
 	}
+
 	sc := sqs.New(ses)
 	if sc.Client == nil {
 		return errors.Errorf("New sqs client error")
