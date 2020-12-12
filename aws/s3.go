@@ -8,7 +8,6 @@ import (
 	"github.com/aws/aws-sdk-go/service/glacier"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/pkg/errors"
-	"net/http"
 	"os"
 	"path"
 )
@@ -29,7 +28,18 @@ func (a *Aws) InitS3Client() error {
 	return nil
 }
 
-func PutToS3(bucket, prefix, filePath string) error {
+func PutObjectToS3(bucket, s3Path string, b []byte) (*s3.PutObjectOutput,error) {
+	out, err := S3Cli.PutObject(&s3.PutObjectInput{
+		Bucket: aws.String(bucket),
+		Key:    aws.String(s3Path),
+		ACL:    aws.String(glacier.CannedACLPublicRead),
+		Body:   bytes.NewReader(b),
+	})
+	return out,err
+}
+
+
+func PutFileToS3(bucket, prefix, filePath string) error {
 	file, err := os.Open(filePath)
 	if err != nil {
 		return err
@@ -54,9 +64,9 @@ func PutToS3(bucket, prefix, filePath string) error {
 		ACL:                  aws.String(glacier.CannedACLPublicRead),
 		Body:                 bytes.NewReader(buffer),
 		ContentLength:        aws.Int64(size),
-		ContentType:          aws.String(http.DetectContentType(buffer)),
-		ContentDisposition:   aws.String("attachment"),
-		ServerSideEncryption: aws.String("AES256"),
+		//ContentType:          aws.String(http.DetectContentType(buffer)),
+		//ContentDisposition:   aws.String("attachment"),	//压缩
+		//ServerSideEncryption: aws.String("AES256"),
 	})
 
 	if err != nil {
@@ -65,3 +75,5 @@ func PutToS3(bucket, prefix, filePath string) error {
 
 	return nil
 }
+
+
