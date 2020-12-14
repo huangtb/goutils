@@ -15,6 +15,7 @@ func NewParamException(msg ...string) Exception {
 	return exception
 }
 
+
 func NewDataTypeException(msg ...string) Exception {
 	exception := Exception{}
 	exception.Code = 4001
@@ -68,4 +69,14 @@ func NewInnerException(msg ...string) Exception {
 	return exception
 }
 
+//自定义错误码
+func NewDefException(code int, msg ...string) Exception {
+	exception := Exception{}
+	exception.Code = code
+	exception.Msg = "System error"
+	if len(msg) > 0 && len(msg[0]) > 0 {
+		exception.Msg = msg[0]
+	}
+	return exception
+}
 
