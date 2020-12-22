@@ -14,17 +14,12 @@ var FHoseCli *firehose.Firehose
 
 func (a *Aws) InitFireHoseClient() error {
 
-	cred := getCredentials(a.AccessKey,a.SecretKey)
-	_, err := cred.Get()
+	sess, err := session.NewSession(a.GetConfig())
 	if err != nil {
-		return errors.Errorf("New Static Credentials  error:" , err.Error())
+		return errors.Errorf("New FireHose Session creation error: %v" , err.Error())
 	}
 
-	sess := session.Must(session.NewSession(aws.NewConfig().WithRegion(a.Region).
-		WithCredentials(cred)))
-
-	f := firehose.New(sess)
-	FHoseCli = f
+	FHoseCli = firehose.New(sess)
 	return nil
 }
 

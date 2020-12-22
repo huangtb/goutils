@@ -11,26 +11,11 @@ var SqsCli *sqs.SQS
 
 func (a *Aws) InitSqsClient() error {
 
-	cred := getCredentials(a.AccessKey,a.SecretKey)
-	_, err := cred.Get()
+	sess, err := session.NewSession(a.GetConfig())
 	if err != nil {
-		return errors.Errorf("New Static Credentials  error:" , err.Error())
+		return errors.Errorf("New SQS session error:%v", err.Error())
 	}
-
-	ses, err := session.NewSession(&aws.Config{
-		Region:      aws.String(a.Region),
-		Credentials: cred,
-		MaxRetries:  aws.Int(5),
-	})
-	if err != nil {
-		return errors.Errorf("New aws session error:%v", err.Error())
-	}
-
-	sc := sqs.New(ses)
-	if sc.Client == nil {
-		return errors.Errorf("New sqs client error")
-	}
-	SqsCli = sc
+	SqsCli = sqs.New(sess)
 	return nil
 }
 
@@ -47,7 +32,7 @@ func SendToSQS(queueUrl, message string) (*sqs.SendMessageOutput, error) {
 }
 
 type Handler interface {
-	HandleMessage(queueUrl string,messages []*sqs.Message) error
+	HandleMessage(queueUrl string, messages []*sqs.Message) error
 }
 
 type Consumer struct {
@@ -75,7 +60,7 @@ func (c *Consumer) NewInputParams() *sqs.ReceiveMessageInput {
 func (c *Consumer) handlerLoop(input *sqs.ReceiveMessageInput, handler Handler) error {
 	for {
 		output, _ := SqsCli.ReceiveMessage(input)
-		err := handler.HandleMessage(c.QueueUrl,output.Messages)
+		err := handler.HandleMessage(c.QueueUrl, output.Messages)
 		if err != nil {
 			return errors.Errorf("New sqs client error:%v", err.Error())
 		}

@@ -16,15 +16,11 @@ var S3Cli *s3.S3
 
 func (a *Aws) InitS3Client() error {
 
-	cred := getCredentials(a.AccessKey,a.SecretKey)
-	_, err := cred.Get()
+	sess, err := session.NewSession(a.GetConfig())
 	if err != nil {
-		return errors.Errorf("New Static Credentials  error:" , err.Error())
+		return errors.Errorf("New S3 Session creation error: %v" , err.Error())
 	}
-
-	cfg := aws.NewConfig().WithRegion(a.Region).WithCredentials(cred)
-	s3 := s3.New(session.New(), cfg)
-	S3Cli = s3
+	S3Cli = s3.New(sess)
 	return nil
 }
 

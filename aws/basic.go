@@ -1,8 +1,8 @@
 package aws
 
 import (
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/aws/credentials/ec2rolecreds"
 )
 
 type Aws struct {
@@ -12,11 +12,19 @@ type Aws struct {
 	SecretKey string `json:"secret_key" yaml:"secret_key"`
 }
 
-func getCredentials(ak, sk string) *credentials.Credentials {
 
-	if ak != "" && sk != "" {
-		return credentials.NewStaticCredentials(ak, sk, "")
+func (a *Aws) GetConfig() *aws.Config {
+	config := aws.Config{
+		Region: aws.String(a.Region),
 	}
 
-	return credentials.NewCredentials(&ec2rolecreds.EC2RoleProvider{})
+	if a.Endpoint != "" {
+		config.Endpoint = aws.String(a.Endpoint)
+	}
+
+	if a.AccessKey != "" && a.AccessKey != "" {
+		config.Credentials = credentials.NewStaticCredentials(a.AccessKey, a.AccessKey, "")
+	}
+
+	return &config
 }

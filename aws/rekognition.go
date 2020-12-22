@@ -1,7 +1,6 @@
 package aws
 
 import (
-	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/rekognition"
 	"github.com/pkg/errors"
@@ -9,24 +8,13 @@ import (
 
 var RekCli *rekognition.Rekognition
 
-func (a *Aws) NewRekognition() error {
+func (a *Aws) InitRekognition() error {
 
-	cred := getCredentials(a.AccessKey,a.SecretKey)
-	_, err := cred.Get()
+	sess, err := session.NewSession(a.GetConfig())
 	if err != nil {
-		return errors.Errorf("New Static Credentials  error:" , err.Error())
+		return errors.Errorf("New Rekognition Session creation error: %v", err.Error())
 	}
-
-	sess, err := session.NewSession(&aws.Config{
-		Credentials: cred,
-		Region:      aws.String(a.Region),
-	})
-	if err != nil {
-		errors.Errorf("New rekognition session err: %v", err.Error())
-	}
-	rek := rekognition.New(sess)
-	if rek == nil {
-		errors.Errorf("New rekognition client is nil : %v ", err.Error())
-	}
+	RekCli = rekognition.New(sess)
 	return nil
+
 }
