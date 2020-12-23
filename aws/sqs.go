@@ -15,11 +15,7 @@ func (a *Aws) InitSqsClient() error {
 	if err != nil {
 		return errors.Errorf("New SQS session error:%v", err.Error())
 	}
-	svc := sqs.New(sess)
-	if svc.Client.Handlers.UnmarshalError.Len() > 0 {
-		return errors.Errorf("SQS UnmarshalError: % +v", svc.Client.Handlers.UnmarshalError)
-	}
-	SqsCli = svc
+	SqsCli = sqs.New(sess)
 	return nil
 }
 
