@@ -15,7 +15,11 @@ func (a *Aws) InitSqsClient() error {
 	if err != nil {
 		return errors.Errorf("New SQS session error:%v", err.Error())
 	}
-	SqsCli = sqs.New(sess)
+	svc := sqs.New(sess)
+	if svc.Client.Handlers.UnmarshalError.Len() > 0 {
+		return errors.Errorf("SQS UnmarshalError: % +v", svc.Client.Handlers.UnmarshalError)
+	}
+	SqsCli = svc
 	return nil
 }
 
@@ -26,7 +30,7 @@ func SendToSQS(queueUrl, message string) (*sqs.SendMessageOutput, error) {
 	}
 	output, err := SqsCli.SendMessage(sendParams)
 	if err != nil {
-		return nil, errors.Errorf("New sqs client error:%v", err.Error())
+		return output, errors.Errorf("Sqs Send Message error:%v", err.Error())
 	}
 	return output, nil
 }
