@@ -30,7 +30,7 @@ func SendToSQS(queueUrl, message string) (*sqs.SendMessageOutput, error) {
 	}
 	output, err := SqsCli.SendMessage(sendParams)
 	if err != nil {
-		return output, errors.Errorf("Sqs Send Message error:%v", err.Error())
+		return output, errors.Errorf("Sqs send message to queueUrl:%s error:%v",queueUrl, err.Error())
 	}
 	return output, nil
 }
