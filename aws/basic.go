@@ -22,8 +22,8 @@ func (a *Aws) GetConfig() *aws.Config {
 		config.Endpoint = aws.String(a.Endpoint)
 	}
 
-	if a.AccessKey != "" && a.AccessKey != "" {
-		config.Credentials = credentials.NewStaticCredentials(a.AccessKey, a.AccessKey, "")
+	if a.AccessKey != "" && a.SecretKey != "" {
+		config.Credentials = credentials.NewStaticCredentials(a.AccessKey, a.SecretKey, "")
 	}
 
 	return &config
