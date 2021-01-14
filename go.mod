@@ -24,6 +24,7 @@ require (
 	github.com/satori/go.uuid v1.2.0 // indirect
 	github.com/segmentio/kafka-go v0.4.8
 	github.com/sirupsen/logrus v1.7.0
+	golang.org/x/tools v0.0.0-20191029190741-b9c20aec41a5
 	gopkg.in/afmobi-QSee/statlog.v2 v2.0.0-20180510080101-e1102d063d7c
 	gopkg.in/alexcesaro/statsd.v2 v2.0.0 // indirect
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect

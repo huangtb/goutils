@@ -68,3 +68,11 @@ func UUID() string {
 }
 
 
+func UrlBase64(content string) []byte {
+	b, err := base64.URLEncoding.DecodeString(content)
+	if err != nil {
+		return nil
+	}
+	return b
+}
+

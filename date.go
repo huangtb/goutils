@@ -1,6 +1,9 @@
 package goutils
 
-import "time"
+import (
+	"strconv"
+	"time"
+)
 
 const (
 	YYYY_mm_DDHH_mm_SS = "2006-01-02 15:04:05"
@@ -32,4 +35,21 @@ func TimeSub(d1, d2 string) int {
 	t1 = t1.UTC().Truncate(24 * time.Hour)
 	t2 = t2.UTC().Truncate(24 * time.Hour)
 	return int(t2.Sub(t1).Hours() / 24)
+}
+
+
+//格式化时间戳
+func FormatTimestamp(ts int64, layout string) string {
+	if layout == "" {
+		return ""
+	}
+	str := strconv.FormatInt(ts, 10)
+	if len(str) == 10 {
+		return time.Unix(ts, 0).Format(layout)
+	}
+
+	if len(str) == 13 {
+		return time.Unix(ts/1000, 0).Format(layout)
+	}
+	return ""
 }
