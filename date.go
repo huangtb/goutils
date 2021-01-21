@@ -53,3 +53,18 @@ func FormatTimestamp(ts int64, layout string) string {
 	}
 	return ""
 }
+
+
+//获取传入的时间所在月份的第一天
+func GetFirstDateOfMonth(date string) string {
+
+	local, _ := time.LoadLocation("Local")
+
+	d, _ := time.ParseInLocation("2006-01-02", date, local)
+
+	d = d.AddDate(0, 0, -d.Day() + 1)
+
+	firstDate := d.Format("2006-01-02")
+
+	return firstDate
+}
