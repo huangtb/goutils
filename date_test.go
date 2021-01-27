@@ -12,3 +12,8 @@ func TestFormatTimestamp(t *testing.T) {
 func TestGetFirstDateOfMonth(t *testing.T) {
 	fmt.Println(GetFirstDateOfMonth("2021-01-21"))
 }
+
+func TestGetCurrFormatDate(t *testing.T) {
+
+	fmt.Println(GetCurrFormatDate(YYYY_mm_DDHH_mm_SS))
+}
